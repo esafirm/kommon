@@ -3,18 +3,21 @@ package com.esafirm.kommon
 import android.os.Handler
 import android.os.Looper
 
+private val handler by lazy { Handler() }
+private val mainThreadHandler by lazy { Handler(Looper.getMainLooper()) }
+
 fun runAsync(action: () -> Unit) {
     Thread(Runnable(action)).start()
 }
 
 fun runOnUiThread(action: () -> Unit) {
-    Handler(Looper.getMainLooper()).post(Runnable(action))
+    mainThreadHandler.post(action)
 }
 
 fun runDelayed(delayMillis: Long, action: () -> Unit) {
-    Handler().postDelayed(Runnable(action), delayMillis)
+    handler.postDelayed(action, delayMillis)
 }
 
 fun runDelayedOnUiThread(delayMillis: Long, action: () -> Unit) {
-    Handler(Looper.getMainLooper()).postDelayed(Runnable(action), delayMillis)
+    mainThreadHandler.postDelayed(action, delayMillis)
 }

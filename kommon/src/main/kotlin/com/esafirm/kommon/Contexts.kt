@@ -203,5 +203,5 @@ val Context.defaultSharedPreferences: SharedPreferences
     get() = PreferenceManager.getDefaultSharedPreferences(this)
 
 inline fun <reified T : Any> Context.startActivity() {
-    startActivity(IntentFor<T>(this))
+    startActivity(intentFor<T>(this))
 }

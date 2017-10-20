@@ -2,13 +2,17 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    final sdk = rootProject.ext.sdk
+
+    compileSdkVersion sdk.compileSdk
+    buildToolsVersion sdk.buildTools
 
     defaultConfig {
         applicationId "com.esafirm.kommonsample"
-        minSdkVersion 16
-        targetSdkVersion 25
+
+        minSdkVersion sdk.minSdk
+        targetSdkVersion sdk.targetSdk
+
         versionCode 1
         versionName "1.0"
     }

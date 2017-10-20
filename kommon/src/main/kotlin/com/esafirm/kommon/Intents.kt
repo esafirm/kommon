@@ -5,9 +5,10 @@ import android.app.Fragment
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Patterns
+import java.io.File
 
-inline fun <reified T : Any> IntentFor(context: Context): Intent = Intent(context, T::class.java)
+
+inline fun <reified T : Any> intentFor(context: Context): Intent = Intent(context, T::class.java)
 
 fun Intent.start(context: Context) = context.startActivity(this)
 
@@ -15,8 +16,21 @@ fun Intent.startForResult(activity: Activity, requestCode: Int) = activity.start
 
 fun Intent.startForResult(fragment: Fragment, requestCode: Int) = fragment.startActivityForResult(this, requestCode)
 
-fun WebIntent(url: String): Intent {
-    return if (Patterns.WEB_URL.matcher(url).matches()) {
-        Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    } else throw IllegalArgumentException("Passed url: $url does not match URL pattern.")
+fun Context.intentViewAction(data: String) {
+    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(data)))
 }
+
+fun Context.intentShareFile(file: File, mimeType: String) {
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.type = mimeType
+    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    startActivity(intent)
+}
+
+fun Context.intentDial(phoneNo: String) {
+    val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNo, null))
+    startActivity(intent)
+}
+
+
