@@ -17,11 +17,15 @@ ext {
             targetSdk : 26,
             minSdk    : 19
     ]
+    deps = [
+            support: '26.1.0'
+    ]
 }
 
 allprojects {
     repositories {
         jcenter()
+        google()
         mavenCentral()
     }
 }

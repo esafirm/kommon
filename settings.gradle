@@ -1,1 +1,1 @@
-include ':kommon', ':kommonsample'
+include ':kommon', ':kommonsample', ':kommonviews'

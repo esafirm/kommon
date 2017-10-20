@@ -1,38 +1,37 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    final sdk = rootProject.ext.sdk
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
-    compileSdkVersion sdk.compileSdk
-    buildToolsVersion sdk.buildTools
 
     defaultConfig {
-        applicationId "com.esafirm.kommonsample"
-
-        minSdkVersion sdk.minSdk
-        targetSdkVersion sdk.targetSdk
-
+        minSdkVersion 19
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     sourceSets {
-        main.java.srcDirs += 'src/main/java'
+        main.java.srcDirs += 'src/main/kotlin'
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':kommon')
-    implementation project(':kommonviews')
 
     final supportVersion = rootProject.ext.deps.support
     implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
