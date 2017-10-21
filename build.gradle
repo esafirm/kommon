@@ -20,6 +20,9 @@ ext {
     deps = [
             support: '26.1.0'
     ]
+    depsDeclare = [
+            test: 'io.kotlintest:kotlintest:2.0.7'
+    ]
 }
 
 allprojects {

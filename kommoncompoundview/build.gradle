@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
@@ -8,32 +8,31 @@ android {
     buildToolsVersion sdk.buildTools
 
     defaultConfig {
-        applicationId "com.esafirm.kommonsample"
-
         minSdkVersion sdk.minSdk
         targetSdkVersion sdk.targetSdk
 
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     sourceSets {
-        main.java.srcDirs += 'src/main/java'
+        main.java.srcDirs += 'src/main/kotlin'
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':kommon')
-    implementation project(':kommonviews')
-    implementation project(':kommoncompoundview')
 
     final supportVersion = rootProject.ext.deps.support
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    testImplementation rootProject.ext.depsDeclare.test
 }

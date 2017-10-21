@@ -1,4 +1,4 @@
-package nolambda.kommon
+package nolambda.kommon.views
 
 import android.app.Fragment
 import android.app.ProgressDialog
