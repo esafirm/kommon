@@ -12,8 +12,11 @@ abstract class BaseListAdapter<T>(context: Context) : RecyclerView.Adapter<Recyc
     protected val inflater: LayoutInflater = LayoutInflater.from(context)
 
     var onItemClickListener: ((Int) -> Unit)? = null
+    var onBottomReachedListener: (() -> Unit)? = null
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override
+
+    fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder.itemView != null && onItemClickListener != null) {
             val finalPosition = holder.adapterPosition
             if (finalPosition != RecyclerView.NO_POSITION) {
@@ -21,7 +24,14 @@ abstract class BaseListAdapter<T>(context: Context) : RecyclerView.Adapter<Recyc
             }
         }
         onBind(holder, position)
+
+        if (isBottom(holder)) {
+            onBottomReachedListener?.invoke()
+        }
     }
+
+    protected fun isBottom(viewHolder: RecyclerView.ViewHolder) =
+            viewHolder.adapterPosition == itemCount - 1
 
     protected abstract fun onBind(holder: RecyclerView.ViewHolder, position: Int)
 
