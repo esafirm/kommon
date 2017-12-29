@@ -7,7 +7,5 @@ import android.widget.FrameLayout
 abstract class FrameCompoundView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), CompoundView {
-    init {
-        setup(context, attrs!!)
-    }
+    protected val viewInfo = setup(context, attrs!!)
 }

@@ -7,19 +7,18 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 
-typealias ViewBinder = (View) -> Unit
+typealias ViewInfo = Pair<Context, AttributeSet>
 
-fun CompoundView.setup(context: Context, attributeSet: AttributeSet, viewBinder: ViewBinder? = null) {
+fun CompoundView.setup(context: Context, attributeSet: AttributeSet): ViewInfo {
     val parent = this as ViewGroup
     View.inflate(context, getLayoutResId(), parent)
-    if (!parent.isInEditMode) {
-        viewBinder?.invoke(parent)
-    }
-    init(context, attributeSet)
+    return context to attributeSet
 }
 
-fun AttributeSet.extract(context: Context, @StyleableRes resId: IntArray, block: TypedArray.() -> Unit) {
-    val array = context.obtainStyledAttributes(this, resId, 0, 0)
+fun ViewInfo.extract(@StyleableRes resId: IntArray, block: TypedArray.() -> Unit) {
+    val context: Context = first
+    val attrs: AttributeSet = second
+    val array = context.obtainStyledAttributes(attrs, resId, 0, 0)
     block(array)
     array.recycle()
 }

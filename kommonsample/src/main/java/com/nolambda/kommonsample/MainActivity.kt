@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
             text = "Press Me"
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             setOnClickListener {
-                start<MainActivity> {
+                start<CompoundViewActivity> {
                     putExtra("test", "This is a value")
                 }
             }
