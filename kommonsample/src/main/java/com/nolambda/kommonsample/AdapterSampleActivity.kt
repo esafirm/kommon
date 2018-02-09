@@ -21,7 +21,7 @@ class AdapterSampleActivity : AppCompatActivity() {
 
         setContentView(recycler)
 
-        SimpleAdapter(this).attach {
+        SimpleAdapter(this).create {
             map<Any>(
                     typePredicate = { pos, _ -> pos == 0 },
                     layout = R.layout.item_header,

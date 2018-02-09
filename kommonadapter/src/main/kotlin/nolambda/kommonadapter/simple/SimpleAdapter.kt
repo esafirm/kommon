@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import nolambda.kommonadapter.multi.AdapterDelegate
 import nolambda.kommonadapter.multi.MultiListAdapter
 
-typealias Binder<T> = (vh: ViewHolder, item: T) -> Unit
+typealias ViewHolderBinder<T> = (vh: ViewHolder, item: T) -> Unit
 typealias TypePredicate = (position: Int, item: Any) -> Boolean
 
 class SimpleAdapter(private val context: Context) {
 
-    fun attach(builder: DelegateBuilder.() -> Unit): SimpleListAdapter {
+    fun create(builder: DelegateBuilder.() -> Unit): SimpleListAdapter {
         val delegates = DelegateBuilder().apply(builder).delegates
         val adapter = SimpleListAdapter(context)
 
@@ -26,16 +26,16 @@ class SimpleAdapter(private val context: Context) {
 
     @Suppress("UNCHECKED_CAST")
     class DelegateBuilder {
-        val delegates: MutableList<SimpleDelegate<Any>> by lazy { mutableListOf<SimpleDelegate<Any>>() }
+        internal val delegates: MutableList<SimpleDelegate<Any>> by lazy { mutableListOf<SimpleDelegate<Any>>() }
 
-        inline fun <reified T : Any> map(@LayoutRes layout: Int, noinline binder: Binder<T>) {
+        inline fun <reified T : Any> map(@LayoutRes layout: Int, noinline binder: ViewHolderBinder<T>) {
             map({ _, i -> i is T }, layout, binder)
         }
 
-        fun <T : Any> map(typePredicate: TypePredicate, @LayoutRes layout: Int, binder: Binder<T>) {
+        fun <T : Any> map(typePredicate: TypePredicate, @LayoutRes layout: Int, binder: ViewHolderBinder<T>) {
             delegates.add(SimpleDelegate(
                     typePredicate = typePredicate,
-                    binder = binder as Binder<Any>,
+                    binder = binder as ViewHolderBinder<Any>,
                     layoutRes = layout
             ))
         }
@@ -43,7 +43,7 @@ class SimpleAdapter(private val context: Context) {
 
 
     class SimpleDelegate<T>(private val typePredicate: TypePredicate,
-                            private val binder: Binder<T>,
+                            private val binder: ViewHolderBinder<T>,
                             private val layoutRes: Int) : AdapterDelegate<Any>() {
         override fun isForType(position: Int, item: Any): Boolean = typePredicate(position, item)
 
