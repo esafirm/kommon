@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+androidExtensions {
+    experimental = true
+}
 
 android {
     final sdk = rootProject.ext.sdk
@@ -31,6 +36,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':kommon')
     implementation project(':kommonviews')
+    implementation project(':kommonadapter')
     implementation project(':kommoncompoundview')
 
     final supportVersion = rootProject.ext.deps.support

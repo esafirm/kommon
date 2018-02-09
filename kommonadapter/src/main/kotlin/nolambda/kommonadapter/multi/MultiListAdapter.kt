@@ -9,7 +9,7 @@ abstract class MultiListAdapter<T>(context: Context) : BaseListAdapter<T>(contex
 
     private val delegateManager = AdapterDelegateManager<T>()
 
-    protected fun addDelegate(delegate: AdapterDelegate<T>) {
+    fun addDelegate(delegate: AdapterDelegate<T>) {
         delegateManager.addDelegate(delegate)
     }
 

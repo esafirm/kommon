@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:id="@+id/item_txt_header"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#633"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="22dp"
+    android:textAllCaps="true"
+    android:textColor="#FFF"
+    android:textSize="22sp"
+    tools:text="Some HEADER">
+
+</TextView>

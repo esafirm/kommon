@@ -14,9 +14,7 @@ abstract class BaseListAdapter<T>(context: Context) : RecyclerView.Adapter<Recyc
     var onItemClickListener: ((Int) -> Unit)? = null
     var onBottomReachedListener: (() -> Unit)? = null
 
-    override
-
-    fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder.itemView != null && onItemClickListener != null) {
             val finalPosition = holder.adapterPosition
             if (finalPosition != RecyclerView.NO_POSITION) {
@@ -41,8 +39,10 @@ abstract class BaseListAdapter<T>(context: Context) : RecyclerView.Adapter<Recyc
     fun pushData(data: List<T>, useDiffUtil: Boolean = true) {
         if (useDiffUtil) {
             DiffUtil.calculateDiff(createDiffCallback(data))
-                    .also { setData(data) }
-                    .also { it.dispatchUpdatesTo(this) }
+                    .also {
+                        setData(data)
+                        it.dispatchUpdatesTo(this)
+                    }
         } else {
             setData(data)
             notifyDataSetChanged()

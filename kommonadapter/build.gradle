@@ -1,5 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+androidExtensions {
+    experimental = true
+}
 
 android {
     final sdk = rootProject.ext.sdk
@@ -31,7 +36,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     final supportVersion = rootProject.ext.deps.support
-    implementation "com.android.support:recyclerview-v7:$supportVersion"
+    api "com.android.support:recyclerview-v7:$supportVersion"
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }

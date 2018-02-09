@@ -7,7 +7,6 @@ import android.content.Intent
 import android.net.Uri
 import java.io.File
 
-
 inline fun <reified T : Any> intentFor(context: Context): Intent = Intent(context, T::class.java)
 
 fun Intent.start(context: Context) = context.startActivity(this)

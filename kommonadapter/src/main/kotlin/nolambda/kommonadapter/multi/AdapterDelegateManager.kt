@@ -8,7 +8,7 @@ import java.util.*
 class AdapterDelegateManager<T> {
 
     companion object {
-        const private val DEFAULT_VIEW_TYPE = 999
+        private const val DEFAULT_VIEW_TYPE = 999
     }
 
     private val delegates = ArrayList<AdapterDelegate<T>>()
