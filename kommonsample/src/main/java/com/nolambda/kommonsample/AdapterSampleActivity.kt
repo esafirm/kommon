@@ -22,7 +22,7 @@ class AdapterSampleActivity : AppCompatActivity() {
         setContentView(recycler)
 
         SimpleAdapter(this).create {
-            map<Any>(
+            map(
                     typePredicate = { pos, _ -> pos == 0 },
                     layout = R.layout.item_header,
                     binder = { vh, _ -> vh.item_txt_header.text = "Ini Header" }
@@ -31,8 +31,8 @@ class AdapterSampleActivity : AppCompatActivity() {
                 vh.item_txt.text = item
                 vh.item_img.setImageDrawable(ColorDrawable(Color.BLACK))
             }
-            map<Int>(R.layout.item_text) { vh, nomor ->
-                vh.item_txt.text = "Nomor $nomor"
+            map<Int>(R.layout.item_text) { vh, number ->
+                vh.item_txt.text = "Nomor $number"
                 vh.item_img.setImageDrawable(ColorDrawable(Color.RED))
             }
         }.also { bind(recycler, it) }

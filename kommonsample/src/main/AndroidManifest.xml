@@ -17,6 +17,7 @@
         </activity>
         <activity android:name=".CompoundViewActivity"/>
         <activity android:name=".AdapterSampleActivity"/>
+        <activity android:name=".MultiWithSimpleDelegateActivity"/>
     </application>
 
 </manifest>

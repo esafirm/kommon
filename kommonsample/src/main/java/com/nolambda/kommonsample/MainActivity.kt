@@ -27,6 +27,10 @@ class MainActivity : AppCompatActivity() {
             addButton("Adapter Sample") {
                 start<AdapterSampleActivity>()
             }
+
+            addButton("Multi Adapter with Delegate Builder ") {
+                start<MultiWithSimpleDelegateActivity>()
+            }
         })
     }
 

@@ -9,12 +9,12 @@ import nolambda.kommonadapter.multi.AdapterDelegate
 import nolambda.kommonadapter.multi.MultiListAdapter
 
 typealias ViewHolderBinder<T> = (vh: ViewHolder, item: T) -> Unit
-typealias TypePredicate = (position: Int, item: Any) -> Boolean
+typealias TypePredicate<T> = (position: Int, item: T) -> Boolean
 
 class SimpleAdapter(private val context: Context) {
 
-    fun create(builder: DelegateBuilder.() -> Unit): SimpleListAdapter {
-        val delegates = DelegateBuilder().apply(builder).delegates
+    fun create(builder: DelegateBuilder<Any>.() -> Unit): SimpleListAdapter {
+        val delegates = DelegateBuilder<Any>().apply(builder).delegates
         val adapter = SimpleListAdapter(context)
 
         delegates.forEach {
@@ -25,31 +25,27 @@ class SimpleAdapter(private val context: Context) {
     }
 
     @Suppress("UNCHECKED_CAST")
-    class DelegateBuilder {
-        internal val delegates: MutableList<SimpleDelegate<Any>> by lazy { mutableListOf<SimpleDelegate<Any>>() }
+    class DelegateBuilder<T> {
+        internal val delegates: MutableList<SimpleDelegate<T>> by lazy { mutableListOf<SimpleDelegate<T>>() }
 
-        inline fun <reified T : Any> map(@LayoutRes layout: Int, noinline binder: ViewHolderBinder<T>) {
-            map({ _, i -> i is T }, layout, binder)
+        inline fun <reified CHILD : T> map(@LayoutRes layout: Int, noinline binder: ViewHolderBinder<CHILD>) {
+            map({ _, i -> i is CHILD }, layout, binder as ViewHolderBinder<T>)
         }
 
-        fun <T : Any> map(typePredicate: TypePredicate, @LayoutRes layout: Int, binder: ViewHolderBinder<T>) {
-            delegates.add(SimpleDelegate(
-                    typePredicate = typePredicate,
-                    binder = binder as ViewHolderBinder<Any>,
-                    layoutRes = layout
-            ))
+        fun map(typePredicate: TypePredicate<T>, @LayoutRes layout: Int, binder: ViewHolderBinder<T>) {
+            delegates.add(SimpleDelegate(typePredicate, binder, layout))
         }
     }
 
+    class SimpleDelegate<in T>(private val typePredicate: TypePredicate<T>,
+                               private val binder: ViewHolderBinder<T>,
+                               private val layoutRes: Int) : AdapterDelegate<T>() {
 
-    class SimpleDelegate<T>(private val typePredicate: TypePredicate,
-                            private val binder: ViewHolderBinder<T>,
-                            private val layoutRes: Int) : AdapterDelegate<Any>() {
-        override fun isForType(position: Int, item: Any): Boolean = typePredicate(position, item)
+        override fun isForType(position: Int, item: T): Boolean = typePredicate(position, item)
 
         @Suppress("UNCHECKED_CAST")
-        override fun onBind(vh: RecyclerView.ViewHolder, item: Any, position: Int) =
-                binder(vh as @kotlin.ParameterName(name = "vh") ViewHolder, item as T)
+        override fun onBind(vh: RecyclerView.ViewHolder, item: T, position: Int) =
+                binder(vh as @kotlin.ParameterName(name = "vh") ViewHolder, item)
 
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): RecyclerView.ViewHolder =
                 ViewHolder(inflater.inflate(layoutRes, parent, false))

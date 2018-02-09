@@ -4,13 +4,25 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import nolambda.kommonadapter.BaseListAdapter
+import nolambda.kommonadapter.simple.SimpleAdapter
 
-abstract class MultiListAdapter<T>(context: Context) : BaseListAdapter<T>(context) {
+open class MultiListAdapter<T>(context: Context) : BaseListAdapter<T>(context) {
+
+    constructor(context: Context, builder: SimpleAdapter.DelegateBuilder<T>.() -> Unit) : this(context) {
+        addDelegates(builder)
+    }
 
     private val delegateManager = AdapterDelegateManager<T>()
 
     fun addDelegate(delegate: AdapterDelegate<T>) {
         delegateManager.addDelegate(delegate)
+    }
+
+    fun addDelegates(builder: SimpleAdapter.DelegateBuilder<T>.() -> Unit) {
+        val delegateBuilder = SimpleAdapter.DelegateBuilder<T>().apply(builder)
+        for (delegate in delegateBuilder.delegates) {
+            delegateManager.addDelegate(delegate as AdapterDelegate<T>)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
