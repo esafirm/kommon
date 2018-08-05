@@ -21,14 +21,20 @@ In your module `build.gradle`
 
 ```groovy
 dependencies {
-    final kommonVersion = 'X.X.X'
+    final kommonVersion = 'x.y.z'
+    implementation "com.github.esafirm.kommon:kommon:$kommonVersion"
     implementation "com.github.esafirm.kommon:kommonviews:$kommonVersion"
     implementation "com.github.esafirm.kommon:kommoncompoundview:$kommonVersion"
-    implementation "com.github.esafirm.kommon:kommon:$kommonVersion"
+    implementation "com.github.esafirm.kommon:kommonadapter$kommonVersion"
 }
 ```
+Where `x.y.z` is the version of Kommon. 
 
-Version can be seen in [Release Page](https://github.com/esafirm/kommon/releases)
+Versions can be seen in [Release Page](https://github.com/esafirm/kommon/releases)
+
+## Usage
+
+For now, the only usage example is exist in the `sample` app.
 
 ## TODO
 
