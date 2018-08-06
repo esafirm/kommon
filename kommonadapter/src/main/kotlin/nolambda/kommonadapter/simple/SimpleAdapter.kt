@@ -29,10 +29,12 @@ class SimpleAdapter(private val context: Context) {
         internal val delegates: MutableList<SimpleDelegate<T>> by lazy { mutableListOf<SimpleDelegate<T>>() }
 
         inline fun <reified CHILD : T> map(@LayoutRes layout: Int, noinline binder: ViewHolderBinder<CHILD>) {
-            map({ _, i -> i is CHILD }, layout, binder as ViewHolderBinder<T>)
+            map(layout, { _, i -> i is CHILD }, binder as ViewHolderBinder<T>)
         }
 
-        fun map(typePredicate: TypePredicate<T>, @LayoutRes layout: Int, binder: ViewHolderBinder<T>) {
+        fun map(@LayoutRes layout: Int,
+                typePredicate: TypePredicate<T>,
+                binder: ViewHolderBinder<T>) {
             delegates.add(SimpleDelegate(typePredicate, binder, layout))
         }
     }
