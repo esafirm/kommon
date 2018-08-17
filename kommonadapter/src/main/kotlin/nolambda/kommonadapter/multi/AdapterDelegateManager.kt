@@ -30,7 +30,17 @@ class AdapterDelegateManager<T> {
         delegates[viewType].onBind(vh, item, position)
     }
 
+    internal fun onUnbind(vh: RecyclerView.ViewHolder, viewType: Int) {
+        delegates[viewType].onUnbind(vh)
+    }
+
     internal fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return delegates[viewType].onCreateViewHolder(inflater, parent)
+        return try {
+            delegates[viewType].onCreateViewHolder(inflater, parent)
+        } catch (e: Exception) {
+            if (e is IndexOutOfBoundsException) {
+                throw IllegalStateException("Index out of bound, probably because there's no match adapter delegate", e)
+            } else throw e
+        }
     }
 }

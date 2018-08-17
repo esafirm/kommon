@@ -28,9 +28,15 @@ abstract class BaseListAdapter<T>(context: Context) : RecyclerView.Adapter<Recyc
         }
     }
 
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        onUnbind(holder, holder.adapterPosition)
+    }
+
     protected fun isBottom(viewHolder: RecyclerView.ViewHolder) =
             viewHolder.adapterPosition == itemCount - 1
 
+    protected abstract fun onUnbind(holder: RecyclerView.ViewHolder, position: Int)
     protected abstract fun onBind(holder: RecyclerView.ViewHolder, position: Int)
 
     override fun getItemCount(): Int = data.size
