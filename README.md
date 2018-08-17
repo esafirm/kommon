@@ -44,9 +44,10 @@ Module specific read me files:
 
 ## TODO
 
-- Add **TEST!!** 
-- Add RecylcerView module
-- Get what usable and useful from the [old repo](https://github.com/esafirm/androidcommon)
+- [ ] Add **TEST!!** 
+- [ ] Depends on android KTX? 
+- [x] Add RecylcerView module **DONE**
+- [x] Get what usable and useful from the [old repo](https://github.com/esafirm/androidcommon) **DON'T DO THIS**
 
 ## License
 
