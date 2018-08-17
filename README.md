@@ -36,6 +36,12 @@ Versions can be seen in [Release Page](https://github.com/esafirm/kommon/release
 
 For now, the only usage example is exist in the `sample` app.
 
+## Readme
+
+Module specific read me files:
+
+- [Kommon Adapter](https://github.com/esafirm/kommon/blob/master/kommonadapter/README.md)
+
 ## TODO
 
 - Add **TEST!!** 
