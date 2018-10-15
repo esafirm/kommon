@@ -1,24 +1,24 @@
 buildscript {
-    ext.kotlin_version = '1.2.60'
+    ext.kotlin_version = '1.2.71'
     repositories {
         jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.android.tools.build:gradle:3.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 ext {
     sdk = [
-            buildTools: '27.0.1',
-            compileSdk: 27,
-            targetSdk : 27,
-            minSdk    : 19
+            buildTools: '28.0.2',
+            compileSdk: 28,
+            targetSdk : 28,
+            minSdk    : 21
     ]
     deps = [
-            support: '26.1.0'
+            support: '28.0.0'
     ]
     depsDeclare = [
             test: 'io.kotlintest:kotlintest:2.0.7'
