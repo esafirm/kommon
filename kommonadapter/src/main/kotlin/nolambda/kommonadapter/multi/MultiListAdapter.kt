@@ -30,11 +30,11 @@ open class MultiListAdapter<T>(context: Context) : BaseListAdapter<T>(context) {
     }
 
     override fun onBind(holder: RecyclerView.ViewHolder, position: Int) {
-        delegateManager.onBind(holder, getItem(position), position, getItemViewType(position))
+        delegateManager.onBind(holder, getItem(position), position, holder.itemViewType)
     }
 
     override fun onUnbind(holder: RecyclerView.ViewHolder, position: Int) {
-        delegateManager.onUnbind(holder, getItemViewType(position))
+        delegateManager.onUnbind(holder, holder.itemViewType)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
