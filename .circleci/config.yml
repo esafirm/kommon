@@ -37,4 +37,5 @@ jobs:
       - run: ./setup.sh
 
       # Build
-      - run: ./gradlew build
+      - run: ./gradlew assembleDebug
+#      - run: ./gradlew build
