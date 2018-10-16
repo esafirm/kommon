@@ -7,8 +7,12 @@ import android.os.Handler
 import android.os.Looper
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.item_header.*
 import kotlinx.android.synthetic.main.item_text.*
 import nolambda.kommonadapter.attach
@@ -21,15 +25,49 @@ data class SampleItem(
 
 class AdapterSampleActivity : AppCompatActivity() {
 
+    private var adapter: SimpleAdapter.SimpleListAdapter? = null
+
+    private fun createLayoutParams(matchWidth: Boolean = true, matchHeight: Boolean = true) =
+            ViewGroup.LayoutParams(
+                    when (matchWidth) {
+                        true -> ViewGroup.LayoutParams.MATCH_PARENT
+                        else -> ViewGroup.LayoutParams.WRAP_CONTENT
+                    },
+                    when (matchHeight) {
+                        true -> ViewGroup.LayoutParams.MATCH_PARENT
+                        else -> ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
+            )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val recycler = RecyclerView(this).apply {
-            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            layoutParams = createLayoutParams()
         }
 
-        setContentView(recycler)
+        val linear = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = createLayoutParams()
+            addView(EditText(context).apply {
+                layoutParams = createLayoutParams(matchHeight = false)
+                addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(q: Editable?) {
+                        filter(q?.toString() ?: "")
+                    }
 
-        SimpleAdapter(this).create {
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    }
+
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    }
+                })
+            })
+            addView(recycler)
+        }
+
+        setContentView(linear)
+
+        adapter = SimpleAdapter(this).create {
             map(
                     typePredicate = { pos, _ -> pos == 0 },
                     layout = R.layout.item_header,
@@ -87,68 +125,80 @@ class AdapterSampleActivity : AppCompatActivity() {
 
     private fun bind(recycler: RecyclerView, adapter: SimpleAdapter.SimpleListAdapter) {
         recycler.attach(adapter = adapter)
-        adapter.pushData(listOf(
-                "Something in the way", "You Moveeee", "You asking me, IDK", 1, "333",
-                "Something", "You Moeeee", "TEst Again, IDK", 2, "1333",
-                SampleItem(
-                        name = "First Item",
-                        value = 1_000
-                ),
-                SampleItem(
-                        name = "Second Item",
-                        value = 1
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 2
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 3
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 4
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 5
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 6
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 7
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 8
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 9
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 10
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 11
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 12
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 13
-                ),
-                SampleItem(
-                        name = "Third Item",
-                        value = 14
-                )))
+        adapter.pushData(createList())
     }
+
+    private fun filter(query: String) {
+        adapter?.pushData(createList().filter {
+            if (it is String) {
+                it.startsWith(query, ignoreCase = true)
+            } else {
+                true
+            }
+        })
+    }
+
+    private fun createList() = listOf(
+            "Something in the way", "You Moveeee", "You asking me, IDK", 1, "333",
+            "Something", "You Moeeee", "TEst Again, IDK", 2, "1333",
+            SampleItem(
+                    name = "First Item",
+                    value = 1_000
+            ),
+            SampleItem(
+                    name = "Second Item",
+                    value = 1
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 2
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 3
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 4
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 5
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 6
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 7
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 8
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 9
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 10
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 11
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 12
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 13
+            ),
+            SampleItem(
+                    name = "Third Item",
+                    value = 14
+            ))
 }

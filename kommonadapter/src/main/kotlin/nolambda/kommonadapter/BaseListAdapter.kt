@@ -15,7 +15,7 @@ abstract class BaseListAdapter<T>(context: Context) : RecyclerView.Adapter<Recyc
     var onBottomReachedListener: (() -> Unit)? = null
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder.itemView != null && onItemClickListener != null) {
+        if (onItemClickListener != null) {
             val finalPosition = holder.adapterPosition
             if (finalPosition != RecyclerView.NO_POSITION) {
                 holder.itemView.setOnClickListener { onItemClickListener?.invoke(finalPosition) }
