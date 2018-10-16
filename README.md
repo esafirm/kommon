@@ -1,4 +1,5 @@
 [![](https://jitpack.io/v/esafirm/kommon.svg)](https://jitpack.io/#esafirm/kommon)
+[![CircleCI](https://circleci.com/gh/esafirm/kommon/tree/master.svg?style=svg)](https://circleci.com/gh/esafirm/kommon/tree/master)
 
 ## Kommon
 
@@ -25,7 +26,7 @@ dependencies {
     implementation "com.github.esafirm.kommon:kommon:$kommonVersion"
     implementation "com.github.esafirm.kommon:kommonviews:$kommonVersion"
     implementation "com.github.esafirm.kommon:kommoncompoundview:$kommonVersion"
-    implementation "com.github.esafirm.kommon:kommonadapter$kommonVersion"
+    implementation "com.github.esafirm.kommon:kommonadapter$;kommonVersion"
 }
 ```
 Where `x.y.z` is the version of Kommon. 
