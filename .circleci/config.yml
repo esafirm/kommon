@@ -14,12 +14,6 @@ jobs:
       JVM_OPTS: -Xmx3200m
       TERM: dumb
 
-    # Specify branch to build
-    general:
-      branches:
-        only:
-         - master # list of branches to build
-
     steps:
       - checkout
 
