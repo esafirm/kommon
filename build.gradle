@@ -31,3 +31,14 @@ allprojects {
         google()
     }
 }
+
+subprojects {
+    task sourcesJar(type: Jar) {
+        from it.sourceSets.main.allSources.srcDirs
+        classifier = 'sources'
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+}
