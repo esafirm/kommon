@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply from: '../publishing.gradle'
 
 android {
     final sdk = rootProject.ext.sdk
