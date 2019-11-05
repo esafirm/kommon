@@ -6,10 +6,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import java.util.*
 
-abstract class BaseListAdapter<T>(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+typealias DiffUtilMaker<T> = (List<T>, List<T>) -> DiffUtil.Callback
+
+abstract class BaseListAdapter<T>(
+    context: Context
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val data = ArrayList<T>()
     protected val inflater: LayoutInflater = LayoutInflater.from(context)
+
+    var diffUtilCallbackMaker: DiffUtilMaker<T> = { o, n -> BaseDiffUtilCallback(o, n) }
 
     var onItemClickListener: ((Int) -> Unit)? = null
     var onBottomReachedListener: (() -> Unit)? = null
@@ -34,7 +40,7 @@ abstract class BaseListAdapter<T>(context: Context) : RecyclerView.Adapter<Recyc
     }
 
     protected fun isBottom(viewHolder: RecyclerView.ViewHolder) =
-            viewHolder.adapterPosition == itemCount - 1
+        viewHolder.adapterPosition == itemCount - 1
 
     protected abstract fun onUnbind(holder: RecyclerView.ViewHolder, position: Int)
     protected abstract fun onBind(holder: RecyclerView.ViewHolder, position: Int)
@@ -44,11 +50,11 @@ abstract class BaseListAdapter<T>(context: Context) : RecyclerView.Adapter<Recyc
     @JvmOverloads
     fun pushData(data: List<T>, useDiffUtil: Boolean = true) {
         if (useDiffUtil) {
-            DiffUtil.calculateDiff(createDiffCallback(data))
-                    .also {
-                        setData(data)
-                        it.dispatchUpdatesTo(this)
-                    }
+            DiffUtil.calculateDiff(diffUtilCallbackMaker(this.data, data))
+                .also {
+                    setData(data)
+                    it.dispatchUpdatesTo(this)
+                }
         } else {
             setData(data)
             notifyDataSetChanged()
@@ -58,10 +64,6 @@ abstract class BaseListAdapter<T>(context: Context) : RecyclerView.Adapter<Recyc
     private fun setData(data: List<T>) {
         this.data.clear()
         this.data.addAll(data)
-    }
-
-    private fun createDiffCallback(data: List<T>): BaseDiffUtilCallback<T> {
-        return BaseDiffUtilCallback(this.data, data)
     }
 
     fun isEmpty() = itemCount == 0

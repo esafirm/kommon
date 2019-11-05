@@ -5,6 +5,9 @@ import android.support.annotation.LayoutRes
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import nolambda.kommonadapter.BaseDiffUtilCallback
+import nolambda.kommonadapter.DefaultValueComparison
+import nolambda.kommonadapter.ValueComparison
 import nolambda.kommonadapter.multi.AdapterDelegate
 import nolambda.kommonadapter.multi.MultiListAdapter
 
@@ -15,11 +18,27 @@ typealias TypePredicate<T> = (position: Int, item: T) -> Boolean
 class SimpleAdapter(private val context: Context) {
 
     fun create(builder: DelegateBuilder<Any>.() -> Unit): SimpleListAdapter {
-        val delegates = DelegateBuilder<Any>().apply(builder).delegates
+        val result = DelegateBuilder<Any>().apply(builder)
+        val delegates = result.delegates
         val adapter = SimpleListAdapter(context)
 
         delegates.forEach {
             adapter.addDelegate(it)
+        }
+
+        if (result.areContentTheSame != null || result.areItemTheSame != null) {
+            adapter.diffUtilCallbackMaker = { old, new ->
+
+                val passedContentTheSame = result.areContentTheSame ?: DefaultValueComparison()
+                val passedItemTheSame = result.areItemTheSame ?: DefaultValueComparison()
+
+                BaseDiffUtilCallback(
+                    old = old,
+                    new = new,
+                    areContentTheSame = passedContentTheSame,
+                    areItemTheSame = passedItemTheSame
+                )
+            }
         }
 
         return adapter
@@ -27,7 +46,12 @@ class SimpleAdapter(private val context: Context) {
 
     @Suppress("UNCHECKED_CAST")
     class DelegateBuilder<T> {
-        internal val delegates: MutableList<SimpleDelegate<T>> by lazy { mutableListOf<SimpleDelegate<T>>() }
+        internal val delegates: MutableList<SimpleDelegate<T>> by lazy {
+            mutableListOf<SimpleDelegate<T>>()
+        }
+
+        var areContentTheSame: ValueComparison<T>? = null
+        var areItemTheSame: ValueComparison<T>? = null
 
         inline fun <reified CHILD : T> map(@LayoutRes layout: Int,
                                            noinline unBinder: ViewHolderUnBinder? = null,
@@ -72,10 +96,10 @@ class SimpleAdapter(private val context: Context) {
 
         @Suppress("UNCHECKED_CAST")
         override fun onBind(vh: RecyclerView.ViewHolder, item: T, position: Int) =
-                binder(vh as @kotlin.ParameterName(name = "vh") ViewHolder, item)
+            binder(vh as @kotlin.ParameterName(name = "vh") ViewHolder, item)
 
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): RecyclerView.ViewHolder =
-                ViewHolder(inflater.inflate(layoutRes, parent, false))
+            ViewHolder(inflater.inflate(layoutRes, parent, false))
 
         override fun onUnbind(vh: RecyclerView.ViewHolder) {
             unBinder?.invoke(vh as ViewHolder)
