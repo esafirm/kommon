@@ -13,14 +13,15 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import kotlinx.android.synthetic.main.item_header.*
 import kotlinx.android.synthetic.main.item_text.*
 import nolambda.kommonadapter.attach
 import nolambda.kommonadapter.simple.SimpleAdapter
 
 data class SampleItem(
-        val name: String,
-        val value: Int
+    val name: String,
+    val value: Int
 )
 
 class AdapterSampleActivity : AppCompatActivity() {
@@ -28,16 +29,16 @@ class AdapterSampleActivity : AppCompatActivity() {
     private var adapter: SimpleAdapter.SimpleListAdapter? = null
 
     private fun createLayoutParams(matchWidth: Boolean = true, matchHeight: Boolean = true) =
-            ViewGroup.LayoutParams(
-                    when (matchWidth) {
-                        true -> ViewGroup.LayoutParams.MATCH_PARENT
-                        else -> ViewGroup.LayoutParams.WRAP_CONTENT
-                    },
-                    when (matchHeight) {
-                        true -> ViewGroup.LayoutParams.MATCH_PARENT
-                        else -> ViewGroup.LayoutParams.WRAP_CONTENT
-                    }
-            )
+        ViewGroup.LayoutParams(
+            when (matchWidth) {
+                true -> ViewGroup.LayoutParams.MATCH_PARENT
+                else -> ViewGroup.LayoutParams.WRAP_CONTENT
+            },
+            when (matchHeight) {
+                true -> ViewGroup.LayoutParams.MATCH_PARENT
+                else -> ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,9 +70,9 @@ class AdapterSampleActivity : AppCompatActivity() {
 
         adapter = SimpleAdapter(this).create {
             map(
-                    typePredicate = { pos, _ -> pos == 0 },
-                    layout = R.layout.item_header,
-                    binder = { vh, _ -> vh.item_txt_header.text = "Ini Header" }
+                typePredicate = { pos, _ -> pos == 0 },
+                layout = R.layout.item_header,
+                binder = { vh, _ -> vh.item_txt_header.text = "Ini Header" }
             )
             map<String>(R.layout.item_text) { vh, item ->
                 vh.item_txt.text = item
@@ -124,7 +125,9 @@ class AdapterSampleActivity : AppCompatActivity() {
     }
 
     private fun bind(recycler: RecyclerView, adapter: SimpleAdapter.SimpleListAdapter) {
-        recycler.attach(adapter = adapter)
+        recycler.attach(adapter = adapter) { pos, _ ->
+            Toast.makeText(applicationContext, "Pos: $pos", Toast.LENGTH_SHORT).show()
+        }
         adapter.pushData(createList())
     }
 
@@ -139,66 +142,66 @@ class AdapterSampleActivity : AppCompatActivity() {
     }
 
     private fun createList() = listOf(
-            "Something in the way", "You Moveeee", "You asking me, IDK", 1, "333",
-            "Something", "You Moeeee", "TEst Again, IDK", 2, "1333",
-            SampleItem(
-                    name = "First Item",
-                    value = 1_000
-            ),
-            SampleItem(
-                    name = "Second Item",
-                    value = 1
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 2
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 3
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 4
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 5
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 6
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 7
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 8
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 9
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 10
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 11
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 12
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 13
-            ),
-            SampleItem(
-                    name = "Third Item",
-                    value = 14
-            ))
+        "Something in the way", "You Moveeee", "You asking me, IDK", 1, "333",
+        "Something", "You Moeeee", "TEst Again, IDK", 2, "1333",
+        SampleItem(
+            name = "First Item",
+            value = 1_000
+        ),
+        SampleItem(
+            name = "Second Item",
+            value = 1
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 2
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 3
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 4
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 5
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 6
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 7
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 8
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 9
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 10
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 11
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 12
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 13
+        ),
+        SampleItem(
+            name = "Third Item",
+            value = 14
+        ))
 }

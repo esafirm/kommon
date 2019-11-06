@@ -22,9 +22,11 @@ abstract class BaseListAdapter<T>(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (onItemClickListener != null) {
-            val finalPosition = holder.adapterPosition
-            if (finalPosition != RecyclerView.NO_POSITION) {
-                holder.itemView.setOnClickListener { onItemClickListener?.invoke(finalPosition) }
+            holder.itemView.setOnClickListener {
+                val finalPosition = holder.adapterPosition
+                if (finalPosition != RecyclerView.NO_POSITION) {
+                    onItemClickListener?.invoke(finalPosition)
+                }
             }
         }
         onBind(holder, position)
