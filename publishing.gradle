@@ -1,8 +1,6 @@
-task sourcesJar(type: Jar) {
+task packageSources(type: Jar, dependsOn: 'classes') {
     from android.sourceSets.main.java.srcDirs
-    archiveClassifier.set('sources')
+    classifier = 'sources'
 }
 
-artifacts {
-    archives sourcesJar
-}
+artifacts { archives packageSources }
