@@ -26,7 +26,7 @@ data class SampleItem(
 
 class AdapterSampleActivity : AppCompatActivity() {
 
-    private var adapter: SimpleAdapter.SimpleListAdapter? = null
+    private var adapter: SimpleAdapter? = null
 
     private fun createLayoutParams(matchWidth: Boolean = true, matchHeight: Boolean = true) =
         ViewGroup.LayoutParams(
@@ -124,7 +124,7 @@ class AdapterSampleActivity : AppCompatActivity() {
         Log.d("ADAPTERSAMPLE", message)
     }
 
-    private fun bind(recycler: RecyclerView, adapter: SimpleAdapter.SimpleListAdapter) {
+    private fun bind(recycler: RecyclerView, adapter: SimpleAdapter) {
         recycler.attach(adapter = adapter) { pos, _ ->
             Toast.makeText(applicationContext, "Pos: $pos", Toast.LENGTH_SHORT).show()
         }

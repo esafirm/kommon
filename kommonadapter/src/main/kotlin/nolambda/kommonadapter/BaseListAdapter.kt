@@ -18,6 +18,7 @@ abstract class BaseListAdapter<T>(
     var diffUtilCallbackMaker: DiffUtilMaker<T> = { o, n -> BaseDiffUtilCallback(o, n) }
 
     var onItemClickListener: ((Int) -> Unit)? = null
+    var onLongItemClickListener: ((Int) -> Boolean)? = null
     var onBottomReachedListener: (() -> Unit)? = null
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -29,6 +30,16 @@ abstract class BaseListAdapter<T>(
                 }
             }
         }
+
+        onLongItemClickListener?.let { onLongClick ->
+            holder.itemView.setOnLongClickListener {
+                val finalPosition = holder.adapterPosition
+                if (finalPosition != RecyclerView.NO_POSITION) {
+                    onLongClick.invoke(finalPosition)
+                } else false
+            }
+        }
+
         onBind(holder, position)
 
         if (isBottom(holder)) {

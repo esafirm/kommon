@@ -15,19 +15,21 @@ typealias ViewHolderUnBinder = (vh: ViewHolder) -> Unit
 typealias ViewHolderBinder<T> = (vh: ViewHolder, item: T) -> Unit
 typealias TypePredicate<T> = (position: Int, item: T) -> Boolean
 
-class SimpleAdapter(private val context: Context) {
+open class SimpleAdapter(context: Context) : MultiListAdapter<Any>(context) {
 
-    fun create(builder: DelegateBuilder<Any>.() -> Unit): SimpleListAdapter {
+    /**
+     * @return the simple adapter itself to keep compatibility
+     */
+    fun create(builder: DelegateBuilder<Any>.() -> Unit): SimpleAdapter {
         val result = DelegateBuilder<Any>().apply(builder)
         val delegates = result.delegates
-        val adapter = SimpleListAdapter(context)
 
         delegates.forEach {
-            adapter.addDelegate(it)
+            addDelegate(it)
         }
 
         if (result.areContentTheSame != null || result.areItemTheSame != null) {
-            adapter.diffUtilCallbackMaker = { old, new ->
+            diffUtilCallbackMaker = { old, new ->
 
                 val passedContentTheSame = result.areContentTheSame ?: DefaultValueComparison()
                 val passedItemTheSame = result.areItemTheSame ?: DefaultValueComparison()
@@ -40,27 +42,28 @@ class SimpleAdapter(private val context: Context) {
                 )
             }
         }
-
-        return adapter
+        return this
     }
 
     @Suppress("UNCHECKED_CAST")
     class DelegateBuilder<T> {
-        internal val delegates: MutableList<SimpleDelegate<T>> by lazy {
-            mutableListOf<SimpleDelegate<T>>()
-        }
+        internal val delegates: MutableList<SimpleDelegate<T>> by lazy { mutableListOf() }
 
         var areContentTheSame: ValueComparison<T>? = null
         var areItemTheSame: ValueComparison<T>? = null
 
-        inline fun <reified CHILD : T> map(@LayoutRes layout: Int,
-                                           noinline unBinder: ViewHolderUnBinder? = null,
-                                           noinline binder: ViewHolderBinder<CHILD>) {
+        inline fun <reified CHILD : T> map(
+            @LayoutRes layout: Int,
+            noinline unBinder: ViewHolderUnBinder? = null,
+            noinline binder: ViewHolderBinder<CHILD>
+        ) {
             map(layout, { _, i -> i is CHILD }, unBinder, binder as ViewHolderBinder<T>)
         }
 
-        inline fun <reified CHILD : T> map(@LayoutRes layout: Int,
-                                           binderBuilder: (BinderBuilder<CHILD>) -> Unit) {
+        inline fun <reified CHILD : T> map(
+            @LayoutRes layout: Int,
+            binderBuilder: (BinderBuilder<CHILD>) -> Unit
+        ) {
 
             val builder = BinderBuilder<CHILD>().apply(binderBuilder)
             val binder = builder.binder
@@ -73,10 +76,12 @@ class SimpleAdapter(private val context: Context) {
             map(layout, { _, i -> i is CHILD }, unBinder, binder as ViewHolderBinder<T>)
         }
 
-        fun map(@LayoutRes layout: Int,
-                typePredicate: TypePredicate<T>,
-                unBinder: ViewHolderUnBinder? = null,
-                binder: ViewHolderBinder<T>) {
+        fun map(
+            @LayoutRes layout: Int,
+            typePredicate: TypePredicate<T>,
+            unBinder: ViewHolderUnBinder? = null,
+            binder: ViewHolderBinder<T>
+        ) {
             delegates.add(SimpleDelegate(typePredicate, binder, unBinder, layout))
         }
     }
@@ -96,7 +101,7 @@ class SimpleAdapter(private val context: Context) {
 
         @Suppress("UNCHECKED_CAST")
         override fun onBind(vh: RecyclerView.ViewHolder, item: T, position: Int) =
-            binder(vh as @kotlin.ParameterName(name = "vh") ViewHolder, item)
+            binder(vh as @ParameterName(name = "vh") ViewHolder, item)
 
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): RecyclerView.ViewHolder =
             ViewHolder(inflater.inflate(layoutRes, parent, false))
@@ -105,6 +110,4 @@ class SimpleAdapter(private val context: Context) {
             unBinder?.invoke(vh as ViewHolder)
         }
     }
-
-    class SimpleListAdapter(context: Context) : MultiListAdapter<Any>(context)
 }
