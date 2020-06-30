@@ -47,7 +47,9 @@ open class SimpleAdapter(context: Context) : MultiListAdapter<Any>(context) {
 
     @Suppress("UNCHECKED_CAST")
     class DelegateBuilder<T> {
-        internal val delegates: MutableList<SimpleDelegate<T>> by lazy { mutableListOf() }
+        internal val delegates: MutableList<SimpleDelegate<T>> by lazy {
+            mutableListOf<SimpleDelegate<T>>()
+        }
 
         var areContentTheSame: ValueComparison<T>? = null
         var areItemTheSame: ValueComparison<T>? = null
