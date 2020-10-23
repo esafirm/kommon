@@ -1,8 +1,8 @@
 package com.nolambda.kommonsample
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_header.*
 import nolambda.kommonadapter.attach
@@ -13,7 +13,7 @@ class MultiWithSimpleDelegateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val recycler = RecyclerView(this).apply {
+        val recycler = androidx.recyclerview.widget.RecyclerView(this).apply {
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         }
 

@@ -5,8 +5,8 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -42,7 +42,7 @@ class AdapterSampleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val recycler = RecyclerView(this).apply {
+        val recycler = androidx.recyclerview.widget.RecyclerView(this).apply {
             layoutParams = createLayoutParams()
         }
 
@@ -124,7 +124,7 @@ class AdapterSampleActivity : AppCompatActivity() {
         Log.d("ADAPTERSAMPLE", message)
     }
 
-    private fun bind(recycler: RecyclerView, adapter: SimpleAdapter) {
+    private fun bind(recycler: androidx.recyclerview.widget.RecyclerView, adapter: SimpleAdapter) {
         recycler.attach(adapter = adapter) { pos, _ ->
             Toast.makeText(applicationContext, "Pos: $pos", Toast.LENGTH_SHORT).show()
         }

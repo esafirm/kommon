@@ -1,11 +1,10 @@
 package nolambda.kommonadapter.simple
 
 import android.content.Context
-import android.support.annotation.LayoutRes
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import nolambda.kommonadapter.BaseDiffUtilCallback
+import nolambda.kommonadapter.BaseDiffUtilItemCallback
 import nolambda.kommonadapter.DefaultValueComparison
 import nolambda.kommonadapter.ValueComparison
 import nolambda.kommonadapter.multi.AdapterDelegate
@@ -34,7 +33,7 @@ open class SimpleAdapter(context: Context) : MultiListAdapter<Any>(context) {
                 val passedContentTheSame = result.areContentTheSame ?: DefaultValueComparison()
                 val passedItemTheSame = result.areItemTheSame ?: DefaultValueComparison()
 
-                BaseDiffUtilCallback(
+                BaseDiffUtilItemCallback(
                     old = old,
                     new = new,
                     areContentTheSame = passedContentTheSame,
@@ -102,13 +101,13 @@ open class SimpleAdapter(context: Context) : MultiListAdapter<Any>(context) {
         override fun isForType(position: Int, item: T): Boolean = typePredicate(position, item)
 
         @Suppress("UNCHECKED_CAST")
-        override fun onBind(vh: RecyclerView.ViewHolder, item: T, position: Int) =
+        override fun onBind(vh: androidx.recyclerview.widget.RecyclerView.ViewHolder, item: T, position: Int) =
             binder(vh as @ParameterName(name = "vh") ViewHolder, item)
 
-        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): RecyclerView.ViewHolder =
+        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): androidx.recyclerview.widget.RecyclerView.ViewHolder =
             ViewHolder(inflater.inflate(layoutRes, parent, false))
 
-        override fun onUnbind(vh: RecyclerView.ViewHolder) {
+        override fun onUnbind(vh: androidx.recyclerview.widget.RecyclerView.ViewHolder) {
             unBinder?.invoke(vh as ViewHolder)
         }
     }

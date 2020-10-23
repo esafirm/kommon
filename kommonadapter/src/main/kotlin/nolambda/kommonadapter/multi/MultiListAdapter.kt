@@ -1,7 +1,7 @@
 package nolambda.kommonadapter.multi
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import nolambda.kommonadapter.BaseListAdapter
 import nolambda.kommonadapter.simple.SimpleAdapter
@@ -29,15 +29,15 @@ open class MultiListAdapter<T>(context: Context) : BaseListAdapter<T>(context) {
         return delegateManager.getItemViewType(position, getItem(position))
     }
 
-    override fun onBind(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBind(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
         delegateManager.onBind(holder, getItem(position), position, holder.itemViewType)
     }
 
-    override fun onUnbind(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onUnbind(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
         delegateManager.onUnbind(holder, holder.itemViewType)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         return delegateManager.onCreateViewHolder(inflater, parent, viewType)
     }
 }

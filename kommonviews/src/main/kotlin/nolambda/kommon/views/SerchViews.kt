@@ -1,7 +1,7 @@
 package nolambda.kommon.views
 
 import android.widget.SearchView
-import android.support.v7.widget.SearchView as SupportSearchView
+import androidx.appcompat.widget.SearchView as SupportSearchView
 
 fun SearchView.onQueryChange(query: (String) -> Unit) {
     setOnQueryTextListener(object : SearchView.OnQueryTextListener {
