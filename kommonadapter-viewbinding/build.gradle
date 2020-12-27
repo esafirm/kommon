@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply from: '../publishing.gradle'
 
 android {
     final sdk = rootProject.ext.sdk
@@ -12,6 +13,10 @@ android {
 
         versionCode 1
         versionName "1.0"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
@@ -28,10 +33,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':kommonadapter')
 
-    final supportVersion = rootProject.ext.deps.support
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
-    testImplementation rootProject.ext.depsDeclare.test
+    api deps.recyclerView
+    implementation deps.appCompat
+    implementation deps.kotlinStdlib
 }

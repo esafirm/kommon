@@ -1,15 +1,12 @@
 package com.nolambda.kommonsample
 
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.ColorFilter
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
+import com.nolambda.kommonsample.adapter.AdapterSampleActivity
+import com.nolambda.kommonsample.adapter.MultiWithSimpleDelegateActivity
 import nolambda.kommon.start
 import nolambda.kommon.toast
 
@@ -23,11 +20,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            addButton("Compound View Sample", onClick = {
-                start<CompoundViewActivity> {
-                    putExtra("test", "This is a value")
-                }
-            })
 
             addButton("Adapter Sample") {
                 start<AdapterSampleActivity>()
@@ -36,11 +28,6 @@ class MainActivity : AppCompatActivity() {
             addButton("Multi Adapter with Delegate Builder ") {
                 start<MultiWithSimpleDelegateActivity>()
             }
-
-            addView(ImageView(context).apply {
-//                setImageDrawable(TickerDrawable())
-                layoutParams = ViewGroup.LayoutParams(200, 200)
-            })
         })
     }
 
@@ -52,25 +39,5 @@ class MainActivity : AppCompatActivity() {
                 onClick()
             }
         }.also { addView(it) }
-    }
-
-    class TickerDrawable : Drawable() {
-
-        override fun draw(canvas: Canvas) {
-            canvas.drawColor(Color.RED)
-        }
-
-        override fun setAlpha(p0: Int) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun getOpacity(): Int {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun setColorFilter(p0: ColorFilter?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
     }
 }

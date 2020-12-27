@@ -1,7 +1,21 @@
 package nolambda.kommonadapter.simple
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
-import kotlinx.android.extensions.LayoutContainer
 
-class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+class ViewHolder(
+    view: View
+) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+
+    private var state: Any? = null
+
+    /**
+     * This omit the need of extending [ViewHolder] for state or object association
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun <T> get(stateCreator: () -> T): T {
+        if (state == null) {
+            state = stateCreator()
+        }
+        return state!! as T
+    }
+}

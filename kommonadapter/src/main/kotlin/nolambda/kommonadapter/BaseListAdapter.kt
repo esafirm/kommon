@@ -1,21 +1,24 @@
 package nolambda.kommonadapter
 
 import android.content.Context
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import java.util.*
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 
-typealias DiffUtilMaker<T> = (List<T>, List<T>) -> DiffUtil.Callback
+typealias DiffUtilMaker<T> = () -> DiffUtil.ItemCallback<T>
 
 abstract class BaseListAdapter<T>(
     context: Context
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val data = ArrayList<T>()
     protected val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    var diffUtilCallbackMaker: DiffUtilMaker<T> = { o, n -> BaseDiffUtilCallback(o, n) }
+    var diffUtilCallbackMaker: DiffUtilMaker<T> = { BaseDiffUtilItemCallback() }
+
+    private val listDiffer by lazy {
+        AsyncListDiffer<T>(this, diffUtilCallbackMaker())
+    }
 
     var onItemClickListener: ((Int) -> Unit)? = null
     var onLongItemClickListener: ((Int) -> Boolean)? = null
@@ -58,28 +61,14 @@ abstract class BaseListAdapter<T>(
     protected abstract fun onUnbind(holder: RecyclerView.ViewHolder, position: Int)
     protected abstract fun onBind(holder: RecyclerView.ViewHolder, position: Int)
 
-    override fun getItemCount(): Int = data.size
+    override fun getItemCount(): Int = listDiffer.currentList.size
 
     @JvmOverloads
-    fun pushData(data: List<T>, useDiffUtil: Boolean = true) {
-        if (useDiffUtil) {
-            DiffUtil.calculateDiff(diffUtilCallbackMaker(this.data, data))
-                .also {
-                    setData(data)
-                    it.dispatchUpdatesTo(this)
-                }
-        } else {
-            setData(data)
-            notifyDataSetChanged()
-        }
-    }
-
-    private fun setData(data: List<T>) {
-        this.data.clear()
-        this.data.addAll(data)
+    fun pushData(data: List<T>) {
+        listDiffer.submitList(data)
     }
 
     fun isEmpty() = itemCount == 0
-    fun getItem(position: Int): T = data[position]
-    fun getData(): List<T> = data
+    fun getItem(position: Int): T = listDiffer.currentList[position]
+    fun getData(): List<T> = listDiffer.currentList
 }

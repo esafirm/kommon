@@ -1,8 +1,8 @@
 package nolambda.kommonadapter.multi
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 class AdapterDelegateManager<T> {
@@ -23,7 +23,7 @@ class AdapterDelegateManager<T> {
 
     internal fun getItemViewType(position: Int, item: T): Int {
         return delegates.indices.find { delegates[it].isForType(position, item) }
-                ?: DEFAULT_VIEW_TYPE
+            ?: DEFAULT_VIEW_TYPE
     }
 
     internal fun onBind(vh: RecyclerView.ViewHolder, item: T, position: Int, viewType: Int) {
@@ -39,7 +39,11 @@ class AdapterDelegateManager<T> {
             delegates[viewType].onCreateViewHolder(inflater, parent)
         } catch (e: Exception) {
             if (e is IndexOutOfBoundsException) {
-                throw IllegalStateException("Index out of bound, probably because there's no match adapter delegate", e)
+                throw IllegalStateException("""
+                    Index out of bound, probably because there's no match adapter delegate"
+                    View type: $viewType
+                    Delegates: $delegates
+                """.trimIndent(), e)
             } else throw e
         }
     }
