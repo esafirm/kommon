@@ -5,16 +5,15 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:4.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 ext {
     sdk = [
-            buildTools: '28.0.2',
-            compileSdk: 28,
-            targetSdk : 28,
+            compileSdk: 30,
+            targetSdk : 30,
             minSdk    : 21
     ]
     deps = [

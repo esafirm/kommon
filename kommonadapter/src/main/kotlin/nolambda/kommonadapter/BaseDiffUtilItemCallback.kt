@@ -20,6 +20,6 @@ class BaseDiffUtilItemCallback<T>(
     }
 
     override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
-        return areContentsTheSame(oldItem, newItem)
+        return areContentTheSame(oldItem, newItem)
     }
 }

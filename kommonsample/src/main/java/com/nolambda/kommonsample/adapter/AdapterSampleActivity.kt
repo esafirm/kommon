@@ -1,27 +1,36 @@
-package com.nolambda.kommonsample
+package com.nolambda.kommonsample.adapter
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
-import kotlinx.android.synthetic.main.item_header.*
+import androidx.appcompat.app.AppCompatActivity
+import com.nolambda.kommonsample.R
+import com.nolambda.kommonsample.databinding.ItemHeaderBinding
+import com.nolambda.kommonsample.databinding.ItemTextBinding
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_text.*
 import nolambda.kommonadapter.attach
+import nolambda.kommonadapter.map
 import nolambda.kommonadapter.simple.SimpleAdapter
+import nolambda.kommonadapter.viewbinding.map
 
 data class SampleItem(
     val name: String,
     val value: Int
+)
+
+data class AnotherSampleItem(
+    val value: String
 )
 
 class AdapterSampleActivity : AppCompatActivity() {
@@ -70,17 +79,31 @@ class AdapterSampleActivity : AppCompatActivity() {
 
         adapter = SimpleAdapter(this).create {
             map(
-                typePredicate = { pos, _ -> pos == 0 },
-                layout = R.layout.item_header,
-                binder = { vh, _ -> vh.item_txt_header.text = "Ini Header" }
+                viewCreator = { inflater, parent ->
+                    ItemHeaderBinding.inflate(inflater, parent, false).root
+                },
+                typePredicate = { position, _ -> position == 0 },
+                binder = { vh, _ ->
+                    val binding = vh.get { ItemHeaderBinding.bind(vh.itemView) }
+                    binding.itemTxtHeader.text = "Ini Header"
+                }
             )
+
             map<String>(R.layout.item_text) { vh, item ->
-                vh.item_txt.text = item
-                vh.item_img.setImageDrawable(ColorDrawable(Color.BLACK))
+                val binding = vh.get { ItemTextBinding.bind(vh.itemView) }
+                binding.itemTxt.text = item
+                binding.itemImg.setImageDrawable(ColorDrawable(Color.BLACK))
             }
+
             map<Int>(R.layout.item_text) { vh, number ->
-                vh.item_txt.text = "Nomor $number"
-                vh.item_img.setImageDrawable(ColorDrawable(Color.RED))
+                val container = vh.get { KotlinContainer(vh.itemView) }
+                container.item_txt.text = "Nomor $number"
+                container.item_img.setImageDrawable(ColorDrawable(Color.RED))
+            }
+
+            map(ItemTextBinding::inflate, AnotherSampleItem::class) { _, item ->
+                itemTxt.text = item.value
+                itemImg.setImageDrawable(ColorDrawable(Color.YELLOW))
             }
 
             // In real app the post cycle should be cleaned up
@@ -94,16 +117,18 @@ class AdapterSampleActivity : AppCompatActivity() {
                         vh.itemView.background = ColorDrawable(Color.BLUE)
                     }
 
+                    val container = vh.get { KotlinContainer(vh.itemView) }
+
                     var counter = 0
-                    vh.item_txt.text = "Initial value: ${item.value}"
-                    val text = vh.item_txt
+                    container.item_txt.text = "Initial value: ${item.value}"
+                    val text = container.item_txt
                     var runnable: Runnable? = null
                     runnable = Runnable {
                         counter += 1
                         text.text = "Counter $counter"
-                        handler.postDelayed(runnable, 1000)
+                        handler.postDelayed(runnable!!, 1000)
                     }
-                    vh.item_img.setImageDrawable(ColorDrawable(Color.GRAY))
+                    container.item_img.setImageDrawable(ColorDrawable(Color.GRAY))
                     handler.postDelayed(runnable, 1000)
                     log("Bind ${vh.adapterPosition}")
 
@@ -111,7 +136,10 @@ class AdapterSampleActivity : AppCompatActivity() {
                 }
 
                 binderContainer.unBinder = {
-                    handler.removeCallbacks(mapOfUnbind[it.adapterPosition])
+                    val runnable = mapOfUnbind[it.adapterPosition]
+                    if (runnable != null) {
+                        handler.removeCallbacks(runnable)
+                    }
                     mapOfUnbind.remove(it.adapterPosition)
                     log("Unbind ${it.adapterPosition}")
                 }
@@ -142,8 +170,16 @@ class AdapterSampleActivity : AppCompatActivity() {
     }
 
     private fun createList() = listOf(
-        "Something in the way", "You Moveeee", "You asking me, IDK", 1, "333",
-        "Something", "You Moeeee", "TEst Again, IDK", 2, "1333",
+        "Test 1",
+        "Test 2",
+        "Test 3",
+        "Test 4",
+        1,
+        2,
+        3,
+        AnotherSampleItem(
+            value = "Testing"
+        ),
         SampleItem(
             name = "First Item",
             value = 1_000
@@ -205,3 +241,5 @@ class AdapterSampleActivity : AppCompatActivity() {
             value = 14
         ))
 }
+
+class KotlinContainer(override val containerView: View?) : LayoutContainer

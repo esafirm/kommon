@@ -20,6 +20,9 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    buildFeatures {
+        viewBinding true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -36,9 +39,9 @@ dependencies {
     implementation project(':kommon')
     implementation project(':kommonviews')
     implementation project(':kommonadapter')
-    implementation project(':kommoncompoundview')
+    implementation project(':kommonadapter-viewbinding')
 
     final supportVersion = rootProject.ext.deps.support
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

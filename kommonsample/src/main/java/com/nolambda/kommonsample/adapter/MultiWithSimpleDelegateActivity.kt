@@ -1,12 +1,12 @@
-package com.nolambda.kommonsample
+package com.nolambda.kommonsample.adapter
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.item_header.*
+import androidx.appcompat.app.AppCompatActivity
+import com.nolambda.kommonsample.databinding.ItemHeaderBinding
 import nolambda.kommonadapter.attach
 import nolambda.kommonadapter.multi.MultiListAdapter
+import nolambda.kommonadapter.viewbinding.map
 
 class MultiWithSimpleDelegateActivity : AppCompatActivity() {
 
@@ -20,8 +20,8 @@ class MultiWithSimpleDelegateActivity : AppCompatActivity() {
         setContentView(recycler)
 
         val adapter = MultiListAdapter<Any>(this) {
-            map<String>(R.layout.item_header) { vh, data ->
-                vh.item_txt_header.text = "This is header ${vh.adapterPosition} with Data ${data}"
+            map(ItemHeaderBinding::inflate, String::class) { vh, data ->
+                itemTxtHeader.text = "This is header ${vh.adapterPosition} with Data ${data}"
             }
         }
 

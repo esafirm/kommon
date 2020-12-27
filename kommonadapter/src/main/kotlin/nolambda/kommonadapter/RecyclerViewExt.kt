@@ -2,12 +2,11 @@ package nolambda.kommonadapter
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SnapHelper
 
-fun <T> androidx.recyclerview.widget.RecyclerView.attach(
-    layoutManager: androidx.recyclerview.widget.RecyclerView.LayoutManager = androidx.recyclerview.widget.LinearLayoutManager(context),
+fun <T> RecyclerView.attach(
+    layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context),
     adapter: BaseListAdapter<T>,
-    itemDecoration: androidx.recyclerview.widget.RecyclerView.ItemDecoration? = null,
+    itemDecoration: RecyclerView.ItemDecoration? = null,
     hasFixedSize: Boolean = false,
     snap: androidx.recyclerview.widget.SnapHelper? = null,
     onBottomReached: (() -> Unit)? = null,
