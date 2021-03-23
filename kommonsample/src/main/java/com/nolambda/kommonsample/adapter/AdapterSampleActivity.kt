@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.item_text.*
 import nolambda.kommonadapter.attach
 import nolambda.kommonadapter.map
 import nolambda.kommonadapter.simple.SimpleAdapter
+import nolambda.kommonadapter.simple.ViewHolder
 import nolambda.kommonadapter.viewbinding.map
 
 data class SampleItem(
@@ -79,8 +80,8 @@ class AdapterSampleActivity : AppCompatActivity() {
 
         adapter = SimpleAdapter(this).create {
             map(
-                viewCreator = { inflater, parent ->
-                    ItemHeaderBinding.inflate(inflater, parent, false).root
+                viewHolderCreator = { inflater, parent ->
+                    ViewHolder(ItemHeaderBinding.inflate(inflater, parent, false).root)
                 },
                 typePredicate = { position, _ -> position == 0 },
                 binder = { vh, _ ->

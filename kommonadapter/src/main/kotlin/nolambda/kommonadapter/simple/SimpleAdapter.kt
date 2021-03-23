@@ -2,7 +2,6 @@ package nolambda.kommonadapter.simple
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import nolambda.kommonadapter.BaseDiffUtilItemCallback
@@ -15,7 +14,7 @@ import kotlin.experimental.ExperimentalTypeInference
 typealias ViewHolderUnBinder = (vh: ViewHolder) -> Unit
 typealias ViewHolderBinder<T> = (vh: ViewHolder, item: T) -> Unit
 typealias TypePredicate<T> = (position: Int, item: T) -> Boolean
-typealias ViewCreator = (inflater: LayoutInflater, parent: ViewGroup?) -> View
+typealias ViewHolderCreator = (inflater: LayoutInflater, parent: ViewGroup?) -> ViewHolder
 
 open class SimpleAdapter(context: Context) : MultiListAdapter<Any>(context) {
 
@@ -55,12 +54,12 @@ open class SimpleAdapter(context: Context) : MultiListAdapter<Any>(context) {
         var areItemTheSame: ValueComparison<T>? = null
 
         fun map(
-            viewCreator: ViewCreator,
+            viewHolderCreator: ViewHolderCreator,
             typePredicate: TypePredicate<T>,
             unBinder: ViewHolderUnBinder? = null,
             binder: ViewHolderBinder<T>
         ) {
-            delegates.add(SimpleDelegate(typePredicate, binder, unBinder, viewCreator))
+            delegates.add(SimpleDelegate(typePredicate, binder, unBinder, viewHolderCreator))
         }
     }
 
@@ -74,7 +73,7 @@ open class SimpleAdapter(context: Context) : MultiListAdapter<Any>(context) {
         private val typePredicate: TypePredicate<T>,
         private val binder: ViewHolderBinder<T>,
         private val unBinder: ViewHolderUnBinder?,
-        private val creator: ViewCreator
+        private val creator: ViewHolderCreator
     ) : AdapterDelegate<T>() {
 
         override fun isForType(position: Int, item: T): Boolean = typePredicate(position, item)
@@ -84,7 +83,7 @@ open class SimpleAdapter(context: Context) : MultiListAdapter<Any>(context) {
             binder(vh as @ParameterName(name = "vh") ViewHolder, item)
 
         override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): RecyclerView.ViewHolder =
-            ViewHolder(creator.invoke(inflater, parent))
+            creator.invoke(inflater, parent)
 
         override fun onUnbind(vh: RecyclerView.ViewHolder) {
             unBinder?.invoke(vh as ViewHolder)
