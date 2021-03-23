@@ -2,8 +2,9 @@ package nolambda.kommonadapter
 
 import androidx.annotation.LayoutRes
 import nolambda.kommonadapter.simple.SimpleAdapter
-import nolambda.kommonadapter.simple.ViewCreator
+import nolambda.kommonadapter.simple.ViewHolder
 import nolambda.kommonadapter.simple.ViewHolderBinder
+import nolambda.kommonadapter.simple.ViewHolderCreator
 import nolambda.kommonadapter.simple.ViewHolderUnBinder
 
 @Suppress("UNCHECKED_CAST")
@@ -12,8 +13,8 @@ inline fun <reified T> SimpleAdapter.DelegateBuilder<Any>.map(
     noinline unBinder: ViewHolderUnBinder? = null,
     noinline binder: ViewHolderBinder<T>
 ) {
-    val viewCreator: ViewCreator = { inflater, parent -> inflater.inflate(layout, parent, false) }
-    map(viewCreator, { _, i -> i is T }, unBinder, binder as ViewHolderBinder<Any>)
+    val holderCreator: ViewHolderCreator = { inflater, parent -> ViewHolder(inflater.inflate(layout, parent, false)) }
+    map(holderCreator, { _, i -> i is T }, unBinder, binder as ViewHolderBinder<Any>)
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -30,6 +31,6 @@ inline fun <reified T> SimpleAdapter.DelegateBuilder<Any>.map(
         throw IllegalStateException("Binder must be implemented from BinderBuilder<T>.binder !!")
     }
 
-    val viewCreator: ViewCreator = { inflater, parent -> inflater.inflate(layout, parent, false) }
+    val viewCreator: ViewHolderCreator = { inflater, parent -> ViewHolder(inflater.inflate(layout, parent, false)) }
     map(viewCreator, { _, i -> i is T }, unBinder, binder as ViewHolderBinder<Any>)
 }

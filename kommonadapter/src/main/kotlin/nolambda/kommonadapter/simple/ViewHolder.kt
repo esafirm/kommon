@@ -18,4 +18,11 @@ class ViewHolder(
         }
         return state!! as T
     }
+
+    fun store(state: Any) {
+        this.state = state
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> fetch(): T? = state as? T
 }

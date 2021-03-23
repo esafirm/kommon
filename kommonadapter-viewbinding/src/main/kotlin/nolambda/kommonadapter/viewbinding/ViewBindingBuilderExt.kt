@@ -16,7 +16,8 @@ inline fun <reified T : Any, VB : ViewBinding> SimpleAdapter.DelegateBuilder<Any
 ) {
     val creator = ViewBindingCreator(viewBindingCreator)
     val finalBinder: ViewHolderBinder<Any> = { vh, item ->
-        binder.invoke(creator.viewBinding, vh, item as T)
+        binder.invoke(vh.fetch<VB>()!!, vh, item as T)
     }
+
     map(creator.asViewCreator(), { _, i -> i is T }, null, finalBinder)
 }
