@@ -9,14 +9,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.nolambda.kommonsample.R
+import com.nolambda.kommonsample.createLayoutParams
+import com.nolambda.kommonsample.createRecycler
 import com.nolambda.kommonsample.databinding.ItemHeaderBinding
 import com.nolambda.kommonsample.databinding.ItemTextBinding
+import com.nolambda.kommonsample.row
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_text.*
 import nolambda.kommonadapter.attach
@@ -38,27 +39,11 @@ class AdapterSampleActivity : AppCompatActivity() {
 
     private var adapter: SimpleAdapter? = null
 
-    private fun createLayoutParams(matchWidth: Boolean = true, matchHeight: Boolean = true) =
-        ViewGroup.LayoutParams(
-            when (matchWidth) {
-                true -> ViewGroup.LayoutParams.MATCH_PARENT
-                else -> ViewGroup.LayoutParams.WRAP_CONTENT
-            },
-            when (matchHeight) {
-                true -> ViewGroup.LayoutParams.MATCH_PARENT
-                else -> ViewGroup.LayoutParams.WRAP_CONTENT
-            }
-        )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val recycler = androidx.recyclerview.widget.RecyclerView(this).apply {
-            layoutParams = createLayoutParams()
-        }
+        val recycler = createRecycler()
 
-        val linear = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = createLayoutParams()
+        row {
             addView(EditText(context).apply {
                 layoutParams = createLayoutParams(matchHeight = false)
                 addTextChangedListener(object : TextWatcher {
@@ -75,8 +60,6 @@ class AdapterSampleActivity : AppCompatActivity() {
             })
             addView(recycler)
         }
-
-        setContentView(linear)
 
         adapter = SimpleAdapter(this).create {
             map(

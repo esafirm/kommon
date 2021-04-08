@@ -1,8 +1,8 @@
 package com.nolambda.kommonsample.adapter
 
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import com.nolambda.kommonsample.createRecycler
 import com.nolambda.kommonsample.databinding.ItemHeaderBinding
 import nolambda.kommonadapter.attach
 import nolambda.kommonadapter.multi.MultiListAdapter
@@ -12,12 +12,7 @@ class MultiWithSimpleDelegateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val recycler = androidx.recyclerview.widget.RecyclerView(this).apply {
-            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        }
-
-        setContentView(recycler)
+        val recycler = createRecycler()
 
         val adapter = MultiListAdapter<Any>(this) {
             map(ItemHeaderBinding::inflate, String::class) { vh, data ->

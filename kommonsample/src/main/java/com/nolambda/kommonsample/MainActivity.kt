@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.nolambda.kommonsample.adapter.AdapterSampleActivity
+import com.nolambda.kommonsample.adapter.CallbackSample
 import com.nolambda.kommonsample.adapter.MultiWithSimpleDelegateActivity
 import nolambda.kommon.start
 import nolambda.kommon.toast
@@ -27,6 +28,10 @@ class MainActivity : AppCompatActivity() {
 
             addButton("Multi Adapter with Delegate Builder ") {
                 start<MultiWithSimpleDelegateActivity>()
+            }
+
+            addButton("Callback Sample") {
+                start<CallbackSample>()
             }
         })
     }
