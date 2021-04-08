@@ -17,6 +17,7 @@
         </activity>
         <activity android:name=".adapter.AdapterSampleActivity" />
         <activity android:name=".adapter.MultiWithSimpleDelegateActivity" />
+        <activity android:name=".adapter.CallbackSample" />
     </application>
 
 </manifest>

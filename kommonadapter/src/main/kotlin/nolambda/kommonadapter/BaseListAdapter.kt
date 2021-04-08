@@ -64,8 +64,8 @@ abstract class BaseListAdapter<T>(
     override fun getItemCount(): Int = listDiffer.currentList.size
 
     @JvmOverloads
-    fun pushData(data: List<T>) {
-        listDiffer.submitList(data)
+    fun pushData(data: List<T>, callback: () -> Unit = {}) {
+        listDiffer.submitList(data, callback)
     }
 
     fun isEmpty() = itemCount == 0
